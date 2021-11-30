@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import FirebaseContext from '../context/firebase';
+import * as ROUTES from '../constants/routes';
 
 export default function Login() {
   const history = useHistory();
@@ -12,7 +13,18 @@ export default function Login() {
   const [error, setError] = useState('');
   const isInvalid = password === '' || emailAdress === '';
 
-  const handleLogin = () => {};
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      await firebase.auth().signInWithEmailAndPassword(emailAdress, password);
+      history.push(ROUTES.DASHBOARD);
+    } catch (err) {
+      setEmailAdress('');
+      setPassword('');
+      setError(err.message);
+    }
+  };
 
   useEffect(() => {
     document.title = 'Login - Instagram Clone';
@@ -23,7 +35,7 @@ export default function Login() {
       <div className="flex w-3/5">
         <img src="/images/iphone-with-profile.jpg" alt="iPhone with Profile" />
       </div>
-      <div classsName="flex flex-col w-2/5">
+      <div className="flex flex-col w-2/5">
         <div className="flex flex-col items-center bg-white p-4 border border-gray-primary mb-4">
           <h1 className="flex justify-center w-full">
             <img src="/images/logo.png" alt="Instagram" className="mt-2 w-6/12 mb-4" />
@@ -61,7 +73,7 @@ export default function Login() {
           <p className="text-sm">
             Don't have an account?
             {`${' '}`}
-            <Link to="/signup" className="font-bold text-blue-medium">
+            <Link to={ROUTES.SIGN_UP} className="font-bold text-blue-medium">
               Sign up
             </Link>
           </p>
