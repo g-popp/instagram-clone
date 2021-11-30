@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 export function seedDatabase(firebase) {
   const users = [
     {
